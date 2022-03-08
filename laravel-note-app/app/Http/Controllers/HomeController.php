@@ -32,4 +32,18 @@ class HomeController extends Controller
         $user = \Auth::user();
         return view('create', compact('user'));
     }
+
+    // create 画面からPOSTのリクエストが送られてきたときの処理
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        // ddで中のデータを出力(dump die)
+        // データを出力した後にプログラムを終了させる。
+        dd($data);
+        // POSTされたデータをDBのmemoテーブルに追加
+        // $memo_id = Memo::insertGetId(['content' => $data['content'], 'user_id' => $data['user_id'], 'status' => 1]);
+
+        // リダイレクトの処理
+        return redirect()->route(('home'));
+    }
 }
