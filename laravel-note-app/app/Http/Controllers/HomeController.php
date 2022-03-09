@@ -52,4 +52,13 @@ class HomeController extends Controller
         // リダイレクトの処理
         return redirect()->route(('home'));
     }
+
+    // ルーティングでURLパラメータとして渡したidを引数にする
+    public function edit($id)
+    {
+        $user = \Auth::user();
+        // 引数で受け取ったidと一致する + ログイン中のユーザーのメモである + 消去されていないメモである + 取ってくるデータは1つ
+        $memo = Memo::where('id', $id)->where('user_id', $user['id'])->where('status', 1)->first();
+        dd($memo);
+    }
 }
