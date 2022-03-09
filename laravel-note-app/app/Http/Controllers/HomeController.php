@@ -59,6 +59,8 @@ class HomeController extends Controller
         $user = \Auth::user();
         // 引数で受け取ったidと一致する + ログイン中のユーザーのメモである + 消去されていないメモである + 取ってくるデータは1つ
         $memo = Memo::where('id', $id)->where('user_id', $user['id'])->where('status', 1)->first();
-        dd($memo);
+        // メモ一覧を取得
+        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        return view('edit', compact('memo', 'user', 'memos'));
     }
 }
