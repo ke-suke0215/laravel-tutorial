@@ -52,7 +52,7 @@ class HomeController extends Controller
         // リダイレクトの処理
         return redirect()->route(('home'));
     }
-
+    
     // ルーティングでURLパラメータとして渡したidを引数にする
     public function edit($id)
     {
@@ -62,5 +62,15 @@ class HomeController extends Controller
         // メモ一覧を取得
         $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
         return view('edit', compact('memo', 'user', 'memos'));
+    }
+    
+    // 引数はフォームから受け取った値とルーティングのURLパラメータ
+    public function update(Request $request, $id)
+    {
+        // $requestのままだと形式がよくわからない感じ
+        $inputs = $request->all();
+        // dd($inputs);
+        Memo::where('id', $id)->update(['content' => $inputs['content']]);
+        return redirect()->route(('home'));
     }
 }

@@ -6,7 +6,8 @@
         {{$user['name']}}
         <div class="card-header">メモ編集</div>
         <div class="card-body">
-            <form method='POST' action="/store">
+            <!-- action属性指定したrouteの関数の第一引数はは、routeのnameの部分とリンクしている -->
+            <form method='POST' action="{{ route('update', ['id' => $memo['id']]) }}">
                 @csrf
                 <input type='hidden' name='user_id' value="{{ $user['id'] }}">
                 <div class="form-group">
