@@ -14,8 +14,13 @@
                      <textarea name='content' class="form-control"rows="10">{{ $memo['content'] }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label for="tag">タグ</label>
-                    <input name='tag' type="text" class="form-control" id="tag" placeholder="タグを入力">
+                    <select class="form-control" name="tag_id">
+                @foreach($tags as $tag)
+                        <option value="{{ $tag['id'] }}" {{ $tag['id'] == $memo['tag_id'] ? "selected" : "" }}>
+                            {{ $tag['name'] }}
+                        </option>
+                @endforeach
+                    </select>
                 </div>
                 <button type='submit' class="btn btn-primary btn-lg">保存</button>
             </form>
