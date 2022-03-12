@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// Memoモデルをインポート
+// モデルをインポート
 use App\Models\Memo;
+use App\Models\Tag;
 
 class HomeController extends Controller
 {
@@ -35,7 +36,8 @@ class HomeController extends Controller
     {
         // ログインしているユーザーの情報を渡す
         $user = \Auth::user();
-        return view('create', compact('user'));
+        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
+        return view('create', compact('user', 'memos'));
     }
 
     // create 画面からPOSTのリクエストが送られてきたときの処理
@@ -45,9 +47,19 @@ class HomeController extends Controller
         // ddで中のデータを出力(dump die)（デバッグとして使用）
         // データを出力した後にプログラムを終了させる。
         // dd($data);
+
+        // 先にタグをインサート
+        // insertGetIdの戻り値はインサートに成功した場合は自動生成されたidになる
+        $tag_id = Tag::insertGetId(['name' => $data['tag'], 'user_id' => $data['user_id']]);
+
         // POSTされたデータをDBのmemoテーブルに追加
         // MemoモデルにDBへ保存する命令を出す
-        $memo_id = Memo::insertGetId(['content' => $data['content'], 'user_id' => $data['user_id'], 'status' => 1]);
+        $memo_id = Memo::insertGetId([
+            'content' => $data['content'], 
+            'user_id' => $data['user_id'], 
+            'tag_id' => $tag_id,
+            'status' => 1
+        ]);
 
         // リダイレクトの処理
         return redirect()->route(('home'));
