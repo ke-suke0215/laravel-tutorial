@@ -29,7 +29,7 @@ class HomeController extends Controller
         // 自分のメモ一覧を取得
         $user = \Auth::user();
         $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
-        return view('home', compact('user', 'memos'));
+        return view('create', compact('user', 'memos'));
     }
 
     public function create()
@@ -101,6 +101,6 @@ class HomeController extends Controller
     public function delete(Request $request, $id)
     {
         Memo::where('id', $id)->update(['status' => 2]);
-        return redirect()->route(('home'));
+        return redirect()->route(('home'))->with('success', 'メモの削除が完了しました。');
     }
 }
