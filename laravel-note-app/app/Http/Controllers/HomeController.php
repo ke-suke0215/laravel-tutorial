@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// モデルをインポート
 use App\Models\Memo;
 use App\Models\Tag;
 
@@ -26,18 +25,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // 自分のメモ一覧を取得
-        $user = \Auth::user();
-        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
-        return view('create', compact('user', 'memos'));
+        return view('create');
     }
 
     public function create()
     {
-        // ログインしているユーザーの情報を渡す
-        $user = \Auth::user();
-        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
-        return view('create', compact('user', 'memos'));
+        return view('create');
     }
 
     // create 画面からPOSTのリクエストが送られてきたときの処理
@@ -81,10 +74,7 @@ class HomeController extends Controller
         // 引数で受け取ったidと一致する + ログイン中のユーザーのメモである + 消去されていないメモである + 取ってくるデータは1つ
         $memo = Memo::where('id', $id)->where('user_id', $user['id'])->where('status', 1)->first();
         // メモ一覧を取得
-        $memos = Memo::where('user_id', $user['id'])->where('status', 1)->orderBy('updated_at', 'DESC')->get();
-        // タグ一覧を取得
-        $tags = Tag::where('user_id', $user['id'])->get();
-        return view('edit', compact('memo', 'user', 'memos', 'tags'));
+        return view('edit', compact('memo'));
     }
     
     // 引数はフォームから受け取った値とルーティングのURLパラメータ
