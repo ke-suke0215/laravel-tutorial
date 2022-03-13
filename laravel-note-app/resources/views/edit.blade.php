@@ -4,9 +4,14 @@
 <div class="row justify-content-center ml-0 mr-0 h-100">
     <div class="card w-100">
         {{$user['name']}}
-        <div class="card-header">メモ編集</div>
+        <div class="card-header">
+            メモ編集
+            <form method="POST" action="{{ route('delete', ['id' => $memo['id']]) }}">
+                <button>削除</button>
+            </form>
+        </div>
         <div class="card-body">
-            <!-- action属性指定したrouteの関数の第一引数はは、routeのnameの部分とリンクしている -->
+            <!-- action属性指定したrouteの関数の第一引数は、routeのnameの部分とリンクしている -->
             <form method='POST' action="{{ route('update', ['id' => $memo['id']]) }}">
                 @csrf
                 <input type='hidden' name='user_id' value="{{ $user['id'] }}">
