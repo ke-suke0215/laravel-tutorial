@@ -7,6 +7,7 @@
         <div class="card-header">
             メモ編集
             <form method="POST" action="{{ route('delete', ['id' => $memo['id']]) }}">
+                @csrf
                 <button>削除</button>
             </form>
         </div>

@@ -96,4 +96,11 @@ class HomeController extends Controller
         Memo::where('id', $id)->update(['content' => $inputs['content'], 'tag_id' =>$inputs['tag_id']]);
         return redirect()->route(('home'));
     }
+
+    // 削除機能
+    public function delete(Request $request, $id)
+    {
+        Memo::where('id', $id)->update(['status' => 2]);
+        return redirect()->route(('home'));
+    }
 }
