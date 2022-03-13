@@ -48,9 +48,18 @@ class HomeController extends Controller
         // データを出力した後にプログラムを終了させる。
         // dd($data);
 
-        // 先にタグをインサート
-        // insertGetIdの戻り値はインサートに成功した場合は自動生成されたidになる
-        $tag_id = Tag::insertGetId(['name' => $data['tag'], 'user_id' => $data['user_id']]);
+        // 同じ人が同一のタグを入力したか調べる
+        $exist_tag = Tag::where('name', $data['tag'])->where('user_id', $data['user_id'])->first();
+        // dd($exist_tag);
+
+        if (empty($exist_tag['id'])) {
+            // 先にタグをインサート
+            // insertGetIdの戻り値はインサートに成功した場合は自動生成されたidになる
+            $tag_id = Tag::insertGetId(['name' => $data['tag'], 'user_id' => $data['user_id']]);
+        } else {
+            // 同一のタグがもともと存在する場合
+            $tag_id = $exist_tag['id'];
+        }
 
         // POSTされたデータをDBのmemoテーブルに追加
         // MemoモデルにDBへ保存する命令を出す
