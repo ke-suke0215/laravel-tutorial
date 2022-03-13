@@ -12,13 +12,13 @@ class Memo extends Model
     public function myMemo($user_id) {
         $tag = \Request::query('tag');
         // タグがなければその人が持っているメモを全て取得
+
         if (empty($tag)) {
             return $this::select('memos.*')->where('user_id', $user_id)->where('status', 1)->get();
         } else {
             $memos = $this::select('memos.*')
-                ->leftJoin('memo_tags', 'memo_id', '=', 'memos.id')
-                ->leftJoin('tags', 'tags.id', '=', 'memo_tags.tag_id')
-                ->where('tags.name', $tag)
+                ->leftJoin('tags', 'tags.id', '=', 'memos.tag_id')
+                ->where('tags.id', $tag)
                 ->where('tags.user_id', $user_id)
                 ->where('memos.user_id', $user_id)
                 ->where('status', 1)
