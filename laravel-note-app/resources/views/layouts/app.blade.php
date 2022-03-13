@@ -88,6 +88,9 @@
               <div class="card-header">タグ一覧</div>
               <div class="card-body py-2 px-4">
                   <a class='d-block' href='/'>全て表示</a>
+        @foreach($tags as $tag)
+                  <a class="d-block" href="/?tag={{$tag['id']}}" >{{ $tag['name'] }}</a>
+        @endforeach
                 </div>
               </div>
             </div>
