@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class LifeCycleTestController extends Controller
+{
+    //
+    public function showServiceContainerTest() 
+    {
+        app()->bind('lifeCycleTest', function() {
+            return 'ライフサイクルテスト';
+        });
+
+        echo app()->make('lifeCycleTest').'<br>';
+
+        // サービスコンテナなしのパターン
+        $message = new Message();
+        $sample = new Sample($message);
+        $sample->run();
+        echo '<br>';
+
+        // サービスコンテナapp()ありのパターン
+        // newでインスタンス化しなくても自動的に依存関係を解決してくれる
+        app()->bind('sample', Sample::class);
+        $sample = app()->make('sample');
+        $sample->run();
+
+        dd(app());
+    }
+}
+
+class Sample
+{
+    public $message;
+    // 引数にクラスを入れることで自動的にインスタンス化する
+    public function __construct(Message $message) {
+        $this->message = $message;
+    }
+    public function run() {
+        $this->message->send();
+    }
+}
+
+class Message
+{
+    public function send() {
+        echo 'メッセージを表示';
+    }   
+}
+ 
