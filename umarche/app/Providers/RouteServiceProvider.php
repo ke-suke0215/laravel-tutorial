@@ -14,10 +14,14 @@ class RouteServiceProvider extends ServiceProvider
      * The path to the "home" route for your application.
      *
      * This is used by Laravel authentication to redirect users after login.
+     * ログイン後のリダイレクト処理
+     * マルチログインに対応させるため、複数のパターンがある
      *
      * @var string
      */
     public const HOME = '/dashboard';
+    public const OWNER_HOME = '/owner/dashboard';
+    public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * The controller namespace for the application.
@@ -43,10 +47,24 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::prefix('owner')  // Owner向け
+                ->as('owner.')   // asで別名を付けることができる。
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/owner.php'));
+                
+            Route::prefix('admin')  // admin向け
+                ->as('admin.')   // asで別名を付けることができる。
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));
+
+            Route::prefix('/')  // 特に指定がない場合はuser向けのURL
+                ->as('user.')   // asで別名を付けることができる。
+                ->middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
-        });
+            });
     }
 
     /**
